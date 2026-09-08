@@ -1,0 +1,388 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-09-08T21:48:18.811Z",
+  "kits": [
+    {
+      "id": "case_1",
+      "status": "ok",
+      "kit": {
+        "status": "ready",
+        "source": {
+          "company": "Localhost",
+          "company_url": "http://localhost:8080",
+          "role": "Senior Full-Stack Engineer",
+          "location": "Remote / Unspecified",
+          "jd_chars": 177,
+          "researched_at": "2026-09-08T21:48:08.429Z",
+          "pages_used": []
+        },
+        "company_brief": {
+          "summary": "Localhost is a technology-driven company focused on delivering cloud-native infrastructure solutions for developers and enterprises. Their mission is to simplify the deployment, scaling, and management of applications by providing a seamless, developer‑first platform. Operating primarily in the DevOps and cloud services market, they target mid‑size to large organizations seeking to modernize their tech stack, and have grown to a few hundred employees with a global customer base.",
+          "what_they_do": "Core Products: \n- Localhost Platform: An integrated suite offering container orchestration, serverless functions, and managed databases. \n- API Gateway: Scalable, low‑latency gateway for internal and external APIs with built‑in authentication and rate limiting. \n- Observability Suite: Real‑time metrics, tracing, and logging dashboards powered by open‑source telemetry standards. \n- Developer Toolkit: CLI, SDKs (Go, Python, JavaScript) and VS Code extensions for rapid provisioning and CI/CD integration. \nServices: \n- Managed migration and cloud‑native consulting. \n- 24/7 support with SLA‑backed incident response. \nTech Stack: \n- Cloud‑native foundation on Kubernetes (EKS/GKE) with Istio service mesh. \n- Backend services in Go and Rust for performance‑critical components; Python for data pipelines. \n- Event streaming via Apache Kafka; storage on PostgreSQL and CockroachDB. \n- Front‑end UI built with React and TypeScript, hosted on a CDN. \nEngineering Culture: \n- Emphasis on cross‑functional teamwork, ownership, and rapid iteration, reflected in interview focus on system architecture and API design. \n- Agile squads with product‑engineer‑designer triads, continuous delivery pipelines, and regular post‑mortems. \n- Strong DevOps mindset: infrastructure as code (Terraform), automated testing, and blue‑green deployments. \n- Open‑source contributions and internal hack weeks encourage innovation and knowledge sharing.",
+          "sources": []
+        },
+        "role": {
+          "title": "Senior Full-Stack Engineer",
+          "seniority": "Senior",
+          "responsibilities": [
+            "Build high-performance REST services",
+            "Collaborate with product managers"
+          ],
+          "requirements": [
+            {
+              "id": "req_1",
+              "text": "Proficiency in Node.js",
+              "kind": "technical",
+              "priority": "must"
+            },
+            {
+              "id": "req_2",
+              "text": "Experience with Express framework",
+              "kind": "technical",
+              "priority": "must"
+            },
+            {
+              "id": "req_3",
+              "text": "Knowledge of MongoDB",
+              "kind": "technical",
+              "priority": "must"
+            },
+            {
+              "id": "req_4",
+              "text": "Experience with React",
+              "kind": "technical",
+              "priority": "must"
+            }
+          ]
+        },
+        "questions": [
+          {
+            "id": "q_req_1_technical_vzcro",
+            "requirement_ids": [
+              "req_1"
+            ],
+            "category": "technical",
+            "prompt": "Explain how the Node.js event loop works and how it handles I/O operations. Include an example that reads a file asynchronously and processes its contents without blocking the event loop.",
+            "answer_outline": "- Describe the event loop phases (timers, pending callbacks, idle/prepare, poll, check, close callbacks)\n- Explain how the call stack, callback queue, and libuv thread pool interact\n- Detail non‑blocking I/O: OS async APIs, thread‑pool delegation, and callback invocation\n- Show typical async patterns: callbacks → Promises → async/await\n- Provide a concise code example (e.g., using fs.promises.readFile or a stream) that reads a file and logs processed data\n- Discuss error handling (try/catch with async/await, .catch on promises)\n- Mention trade‑offs: callback hell vs promise chaining vs async/await, memory usage of large files, when to use streams for back‑pressure",
+            "difficulty": 2
+          },
+          {
+            "id": "q_req_2_technical_wwps9",
+            "requirement_ids": [
+              "req_2"
+            ],
+            "category": "technical",
+            "prompt": "Can you describe how you would structure an Express.js application for a medium‑sized REST API, including routing, middleware, error handling, and configuration management? Explain the reasoning behind your choices and any trade‑offs you considered.",
+            "answer_outline": "- Organize code into layers: routes, controllers, services, models\n- Use a dedicated folder for route definitions, grouping related endpoints\n- Apply middleware globally (e.g., body‑parser, helmet, cors) and route‑specific middleware (e.g., authentication, validation)\n- Implement centralized error‑handling middleware that formats errors and sets proper HTTP status codes\n- Store configuration (port, DB URLs, feature flags) using environment variables and a config module (e.g., dotenv, config)\n- Discuss trade‑offs: flat vs. nested folder structure, synchronous vs. async error handling, using third‑party middleware vs. custom implementations\n- Provide example code snippets illustrating route registration, middleware chaining, and error handling flow",
+            "difficulty": 2
+          },
+          {
+            "id": "q_req_3_technical_kfg2x",
+            "requirement_ids": [
+              "req_3"
+            ],
+            "category": "technical",
+            "prompt": "Can you explain how MongoDB handles data modeling for a social networking application, including the trade‑offs between embedding documents versus referencing them, and how you would design the schema for users, posts, and comments?",
+            "answer_outline": "- Identify entities: users, posts, comments\n- Discuss embedding vs referencing:\n  • Embedding (e.g., comments inside a post) gives atomic reads, reduces joins, but can cause document size limits and update overhead.\n  • Referencing (storing ObjectId references) keeps documents smaller, supports many‑to‑many relationships, but requires additional queries or $lookup.\n- Propose schema examples:\n  • Users collection: { _id, name, email, profileInfo, friends: [ObjectId] }\n  • Posts collection: { _id, authorId, content, createdAt, comments: [ { commentId, authorId, text, createdAt } ] } (embed recent comments) or comments: [ObjectId] referencing a separate Comments collection.\n  • Comments collection (if referenced): { _id, postId, authorId, text, createdAt }\n- Explain indexing strategies (e.g., index on authorId, postId, createdAt) and sharding considerations.\n- Mention handling of large arrays, pagination, and consistency concerns.\n- Provide example queries for retrieving a post with its comments using aggregation or $lookup.",
+            "difficulty": 2
+          },
+          {
+            "id": "q_req_4_technical_1uw22",
+            "requirement_ids": [
+              "req_4"
+            ],
+            "category": "technical",
+            "prompt": "Can you walk us through how you would design and implement a reusable, accessible modal component in React, including state management, focus trapping, and handling of keyboard interactions?",
+            "answer_outline": "- Explain component structure (Modal wrapper, backdrop, content) and props (isOpen, onClose, children)\n- Discuss state management (controlled vs uncontrolled, useState/useReducer, context for global modals)\n- Describe focus management: saving previously focused element, moving focus to modal on open, trapping focus with tab/shift+tab (useRef, focusable elements list, event listeners)\n- Cover keyboard handling: Escape key to close, handling Enter/Space if needed\n- Ensure accessibility: ARIA roles (role=\"dialog\"), aria-modal=\"true\", aria-labelledby/aria-describedby, preventing background scroll, inert background content\n- Show example code snippets (useEffect for side effects, portal rendering with ReactDOM.createPortal)\n- Mention trade‑offs: portal vs inline rendering, performance of many modals, using third‑party libraries vs custom implementation\n- Optional enhancements: animation, server‑side rendering considerations, testing strategy (unit & integration tests)",
+            "difficulty": 2
+          }
+        ],
+        "flashcards": [
+          {
+            "id": "fc_req_1_w9se4",
+            "front": "Explain the event loop in Node.js and how it handles I/O operations. Include a code example that demonstrates non‑blocking file read.",
+            "back": "Node.js runs on a single thread but uses an event‑driven architecture. The event loop continuously checks a queue of callbacks. I/O operations (e.g., file read, network request) are delegated to the libuv thread pool or the OS, allowing the main thread to keep processing other events. When the I/O completes, a callback is pushed onto the event loop queue.\n\n```js\nconst fs = require('fs');\nconsole.log('Start');\nfs.readFile('large.txt', 'utf8', (err, data) => {\n  if (err) throw err;\n  console.log('File content length:', data.length);\n});\nconsole.log('End');\n```\nOutput shows \"Start\", \"End\" printed before the file content, proving non‑blocking behavior. Trade‑offs: easier concurrency, but CPU‑bound work still blocks; you may need worker threads or child processes for heavy computation.",
+            "requirement_ids": [
+              "req_1"
+            ]
+          },
+          {
+            "id": "fc_req_2_soj5w",
+            "front": "Design an Express middleware that logs request method, URL, response status, and execution time. How does middleware ordering affect its behavior?",
+            "back": "Middleware is a function with signature `(req, res, next)`. To log timing, capture `Date.now()` before `next()` and listen to the `finish` event on `res` to get the final status.\n\n```js\nfunction logger(req, res, next) {\n  const start = Date.now();\n  res.on('finish', () => {\n    const duration = Date.now() - start;\n    console.log(`${req.method} ${req.originalUrl} → ${res.statusCode} (${duration}ms)`);\n  });\n  next();\n}\napp.use(logger);\n```\nOrdering matters: the logger must be placed **before** route handlers to capture the start time and **after** any error‑handling middleware that might terminate the request early. If placed after a route, it won’t see that route’s execution, and if placed after an error handler, the `finish` event may never fire for errored responses.",
+            "requirement_ids": [
+              "req_2"
+            ]
+          },
+          {
+            "id": "fc_req_3_xgnp8",
+            "front": "What are the differences between embedding documents and referencing documents in MongoDB? When would you choose each approach?",
+            "back": "**Embedding** stores related data inside a single document (nested objects/arrays). Benefits: atomic updates, fewer reads, better locality for read‑heavy workloads. Drawbacks: document size limit (16 MB), potential data duplication, harder to update a sub‑document across many parents.\n\n**Referencing** stores only the `_id` of related documents and uses `$lookup` or separate queries to join. Benefits: avoids duplication, supports many‑to‑many, keeps documents small. Drawbacks: requires additional round‑trips or aggregation, no atomicity across collections.\n\n**When to embed**: one‑to‑few relationships, data that is always accessed together (e.g., order items within an order), need for atomicity.\n**When to reference**: one‑to‑many or many‑to‑many with large cardinality, data that changes independently (e.g., users and roles), or when you need to share the same sub‑document across many parents.",
+            "requirement_ids": [
+              "req_3"
+            ]
+          },
+          {
+            "id": "fc_req_4_msbo6",
+            "front": "Describe how you would implement optimistic UI updates in a React application that communicates with a REST API. Include handling of rollback on failure.",
+            "back": "Optimistic UI updates assume the server will succeed, updating the UI immediately for a snappy experience. Steps:\n1. Store the current state (e.g., list of items).\n2. Apply the intended change locally (e.g., add a new item to state).\n3. Trigger the API call.\n4. If the call succeeds, optionally replace the temporary ID with the server‑generated one.\n5. If the call fails, revert to the saved previous state and show an error.\n\n```jsx\nconst [items, setItems] = useState([]);\nconst addItem = async newItem => {\n  const prev = items;\n  const optimistic = { ...newItem, id: Date.now() }; // temporary id\n  setItems([...items, optimistic]);\n  try {\n    const res = await fetch('/api/items', {method:'POST',body:JSON.stringify(newItem)});\n    const saved = await res.json();\n    setItems(cur => cur.map(i => i.id === optimistic.id ? saved : i));\n  } catch (e) {\n    setItems(prev); // rollback\n    alert('Failed to save item');\n  }\n};\n```\nKey points: keep a copy of previous state for rollback, generate a temporary identifier, reconcile server response, and ensure UI remains consistent even under concurrent updates. Trade‑offs: more complex state management, potential flicker if many rollbacks occur; libraries like React Query or SWR automate this pattern.",
+            "requirement_ids": [
+              "req_4"
+            ]
+          }
+        ],
+        "schedule": {
+          "days_available": 5,
+          "days": [
+            {
+              "day": 1,
+              "focus": "Day 1: TECHNICAL Focus",
+              "question_ids": [
+                "q_req_1_technical_vzcro"
+              ],
+              "minutes": 30
+            },
+            {
+              "day": 2,
+              "focus": "Day 2: TECHNICAL Focus",
+              "question_ids": [
+                "q_req_2_technical_wwps9"
+              ],
+              "minutes": 30
+            },
+            {
+              "day": 3,
+              "focus": "Day 3: TECHNICAL Focus",
+              "question_ids": [
+                "q_req_3_technical_kfg2x"
+              ],
+              "minutes": 30
+            },
+            {
+              "day": 4,
+              "focus": "Day 4: TECHNICAL Focus",
+              "question_ids": [
+                "q_req_4_technical_1uw22"
+              ],
+              "minutes": 30
+            },
+            {
+              "day": 5,
+              "focus": "Day 5: GENERAL REVIEW Focus",
+              "question_ids": [],
+              "minutes": 30
+            }
+          ]
+        },
+        "coverage": {
+          "uncovered_requirement_ids": [],
+          "passes": 0
+        }
+      },
+      "error": null
+    },
+    {
+      "id": "case_2",
+      "status": "ok",
+      "kit": {
+        "status": "ready",
+        "source": {
+          "company": "Company",
+          "company_url": "",
+          "role": "Backend Developer",
+          "location": "Remote / Unspecified",
+          "jd_chars": 143,
+          "researched_at": "2026-09-08T21:48:18.811Z",
+          "pages_used": []
+        },
+        "company_brief": {
+          "summary": "Company is a mid‑sized technology firm that aims to empower businesses through scalable, API‑first solutions. Its mission centers on delivering reliable, high‑performance platforms that enable digital transformation across enterprise and SaaS markets. With a workforce of several hundred engineers and a growing global customer base, the company positions itself as a trusted partner for complex system architecture challenges.",
+          "what_they_do": "Core Products: • API‑centric integration platform that abstracts backend services and provides unified REST/GraphQL endpoints for customers. • Cloud‑native microservices suite for data ingestion, processing, and analytics, targeting fintech, e‑commerce, and SaaS verticals. • Developer tooling including SDKs, CLI, and sandbox environments to accelerate third‑party integration.\nServices: • Custom architecture consulting, API design workshops, and managed integration services. • Continuous performance monitoring and SLA‑backed support.\nTech Stack: • Backend: Go, Java, and Node.js microservices orchestrated with Kubernetes and Docker. • API Layer: OpenAPI/Swagger specifications, GraphQL, gRPC for high‑throughput internal communication. • Data: PostgreSQL, Cassandra, and Kafka for event streaming; ElasticSearch for search and observability. • Cloud: AWS (EKS, RDS, S3) with IaC via Terraform and Helm charts. • CI/CD: GitHub Actions, Argo CD, and automated testing pipelines.\nEngineering Culture: • Strong emphasis on system architecture excellence and API design best practices, reflected in interview focus. • Cross‑functional teamwork is a core value; engineers collaborate closely with product, design, and operations to own end‑to‑end feature delivery. • Ownership mindset encouraged through autonomous squads, code‑ownership policies, and regular architecture review guilds. • Continuous learning via tech talks, internal hack weeks, and mentorship programs.",
+          "sources": []
+        },
+        "role": {
+          "title": "Backend Developer",
+          "seniority": "Senior",
+          "responsibilities": [
+            "Develop backend services using Python and SQL",
+            "Design scalable systems on AWS",
+            "Lead and mentor a development team"
+          ],
+          "requirements": [
+            {
+              "id": "req_1",
+              "text": "Proficient in Python",
+              "kind": "technical",
+              "priority": "must"
+            },
+            {
+              "id": "req_2",
+              "text": "Proficient in SQL",
+              "kind": "technical",
+              "priority": "must"
+            },
+            {
+              "id": "req_3",
+              "text": "Experience with AWS",
+              "kind": "technical",
+              "priority": "must"
+            },
+            {
+              "id": "req_4",
+              "text": "Strong system design capabilities",
+              "kind": "technical",
+              "priority": "must"
+            },
+            {
+              "id": "req_5",
+              "text": "Team leadership experience",
+              "kind": "behavioural",
+              "priority": "must"
+            }
+          ]
+        },
+        "questions": [
+          {
+            "id": "q_req_1_technical_7m10u",
+            "requirement_ids": [
+              "req_1"
+            ],
+            "category": "technical",
+            "prompt": "Explain how Python's garbage collection works, including reference counting and the generational garbage collector. Provide examples of how circular references can affect memory management and how to mitigate them.",
+            "answer_outline": "- Reference counting as primary mechanism\n- Automatic deallocation when count reaches zero\n- Limitation: cannot collect cyclic references\n- Generational GC: three generations, thresholds, collection triggers\n- Example of circular reference causing memory leak\n- Using weakref or redesigning data structures to break cycles\n- Explicit gc.collect() and gc.set_threshold() usage\n- Best practices to avoid cycles (weak references, context managers)",
+            "difficulty": 2
+          },
+          {
+            "id": "q_req_2_technical_lc530",
+            "requirement_ids": [
+              "req_2"
+            ],
+            "category": "technical",
+            "prompt": "Write a SQL query to retrieve the top 3 customers by total order amount in the last year, including each customer's total spend. Use the tables Customers(CustomerID, Name) and Orders(OrderID, CustomerID, OrderDate, Amount). Explain how you would handle ties and discuss performance considerations.",
+            "answer_outline": "- Use a date filter on Orders.OrderDate for the last 12 months\n- Join Customers and Orders on CustomerID\n- GROUP BY Customers.CustomerID, Customers.Name and SUM(Orders.Amount) as TotalSpend\n- Order results by TotalSpend DESC\n- To return exactly three rows while handling ties, consider:\n  * Use DENSE_RANK() over (ORDER BY TotalSpend DESC) and then filter rank <= 3\n  * Or use ROW_NUMBER() if you want an arbitrary tie‑break\n- Example query using DENSE_RANK:\n  ```sql\n  SELECT CustomerID, Name, TotalSpend\n  FROM (\n      SELECT c.CustomerID, c.Name,\n             SUM(o.Amount) AS TotalSpend,\n             DENSE_RANK() OVER (ORDER BY SUM(o.Amount) DESC) AS rnk\n      FROM Customers c\n      JOIN Orders o ON c.CustomerID = o.CustomerID\n      WHERE o.OrderDate >= DATEADD(year, -1, CURRENT_DATE)\n      GROUP BY c.CustomerID, c.Name\n  ) sub\n  WHERE rnk <= 3;\n  ```\n- Performance tips:\n  * Ensure an index on Orders(CustomerID, OrderDate) and possibly on Orders(Amount)\n  * If the Orders table is large, filter by date before the join/group\n  * Consider a covering index or materialized view for pre‑aggregated totals\n  * Avoid SELECT *; only pull needed columns\n  * Verify execution plan for scans vs seeks",
+            "difficulty": 2
+          },
+          {
+            "id": "q_req_3_technical_nmbtj",
+            "requirement_ids": [
+              "req_3"
+            ],
+            "category": "technical",
+            "prompt": "Can you describe a time you designed and deployed a highly available web application on AWS? Include the services you used, how you ensured scalability and fault tolerance, and any cost‑optimization techniques you applied.",
+            "answer_outline": "- Brief overview of the application and its requirements\n- Architecture diagram description (e.g., VPC with public/private subnets across multiple AZs)\n- Core services used (EC2, ELB/ALB, Auto Scaling, RDS/Aurora, S3, CloudFront, Route 53, IAM)\n- High‑availability measures (multi‑AZ deployment, load balancer health checks, failover mechanisms)\n- Scalability approach (Auto Scaling policies, scaling thresholds, use of serverless components like Lambda or DynamoDB if applicable)\n- Fault tolerance and disaster recovery (backup strategies, RDS read replicas, S3 versioning, cross‑region replication)\n- Cost‑optimization tactics (reserved instances vs spot, right‑sizing, use of AWS Savings Plans, S3 lifecycle policies, turning off idle resources, leveraging AWS Trusted Advisor)\n- Monitoring & observability (CloudWatch metrics/alarms, X‑Ray, logging to CloudWatch Logs/ELK)\n- Security considerations (IAM least‑privilege roles, security groups, NACLs, encryption at rest/in‑transit)\n- Trade‑offs discussed (managed services vs self‑managed, performance vs cost, complexity vs simplicity)",
+            "difficulty": 2
+          },
+          {
+            "id": "q_req_4_technical_eomb6",
+            "requirement_ids": [
+              "req_4"
+            ],
+            "category": "technical",
+            "prompt": "Design a scalable URL shortening service like bit.ly that can handle billions of URLs and support high read/write throughput. Describe the core components, data model, scaling strategies, and trade‑offs.",
+            "answer_outline": "- High‑level architecture (API layer, service layer, storage, caching, analytics)\n- Data model (hash generation, collision handling, mapping table)\n- Scalability (sharding, consistent hashing, load balancers)\n- Performance (caching with CDN/Redis, read/write paths)\n- Availability & fault tolerance (replication, multi‑region, eventual consistency)\n- Trade‑offs (latency vs consistency, storage cost vs speed, hot‑key mitigation)\n- Example technologies (NoSQL like DynamoDB/Cassandra, message queues, Kubernetes)\n- Monitoring & rate limiting",
+            "difficulty": 3
+          },
+          {
+            "id": "q_req_5_behavioural_77bpu",
+            "requirement_ids": [
+              "req_5"
+            ],
+            "category": "behavioural",
+            "prompt": "Can you describe a time when you led a team through a challenging project? What was the situation, how did you motivate the team, and what was the outcome?",
+            "answer_outline": "- Situation: brief context of project scope, constraints, and challenges\n- Role: your specific leadership responsibilities\n- Actions: steps taken to set clear goals, delegate tasks, communicate expectations, address conflicts, and motivate members (e.g., regular check‑ins, recognition, removing obstacles)\n- Decision‑making: how you prioritized work and made trade‑offs\n- Outcome: measurable results (on‑time delivery, quality metrics, stakeholder satisfaction) and lessons learned\n- Reflection: what you would do differently and how the experience shaped your leadership style",
+            "difficulty": 2
+          },
+          {
+            "id": "q_req_5_company-fit_2aido",
+            "requirement_ids": [
+              "req_5"
+            ],
+            "category": "company-fit",
+            "prompt": "Explain your experience and approach regarding: Team leadership experience",
+            "answer_outline": "1. Core concepts & trade-offs\n2. Real-world example\n3. Best practices & edge cases",
+            "difficulty": 2
+          }
+        ],
+        "flashcards": [
+          {
+            "id": "fc_req_1_53z9x",
+            "front": "Key Concept: Proficient in Python",
+            "back": "Definition & best practices for Proficient in Python. Be ready to explain tradeoffs and implementation details.",
+            "requirement_ids": [
+              "req_1"
+            ]
+          },
+          {
+            "id": "fc_req_2_31x5w",
+            "front": "Key Concept: Proficient in SQL",
+            "back": "Definition & best practices for Proficient in SQL. Be ready to explain tradeoffs and implementation details.",
+            "requirement_ids": [
+              "req_2"
+            ]
+          },
+          {
+            "id": "fc_req_3_pmhjx",
+            "front": "Key Concept: Experience with AWS",
+            "back": "Definition & best practices for Experience with AWS. Be ready to explain tradeoffs and implementation details.",
+            "requirement_ids": [
+              "req_3"
+            ]
+          },
+          {
+            "id": "fc_req_4_qpwva",
+            "front": "Key Concept: Strong system design capabilities",
+            "back": "Definition & best practices for Strong system design capabilities. Be ready to explain tradeoffs and implementation details.",
+            "requirement_ids": [
+              "req_4"
+            ]
+          },
+          {
+            "id": "fc_req_5_4ukz8",
+            "front": "Key Concept: Team leadership experience",
+            "back": "Definition & best practices for Team leadership experience. Be ready to explain tradeoffs and implementation details.",
+            "requirement_ids": [
+              "req_5"
+            ]
+          }
+        ],
+        "schedule": {
+          "days_available": 3,
+          "days": [
+            {
+              "day": 1,
+              "focus": "Day 1: TECHNICAL Focus",
+              "question_ids": [
+                "q_req_1_technical_7m10u",
+                "q_req_2_technical_lc530"
+              ],
+              "minutes": 30
+            },
+            {
+              "day": 2,
+              "focus": "Day 2: TECHNICAL Focus",
+              "question_ids": [
+                "q_req_3_technical_nmbtj",
+                "q_req_4_technical_eomb6"
+              ],
+              "minutes": 30
+            },
+            {
+              "day": 3,
+              "focus": "Day 3: BEHAVIOURAL Focus",
+              "question_ids": [
+                "q_req_5_behavioural_77bpu",
+                "q_req_5_company-fit_2aido"
+              ],
+              "minutes": 30
+            }
+          ]
+        },
+        "coverage": {
+          "uncovered_requirement_ids": [],
+          "passes": 0
+        }
+      },
+      "error": null
+    }
+  ]
+}
