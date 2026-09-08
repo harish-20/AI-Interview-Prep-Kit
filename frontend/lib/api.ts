@@ -22,6 +22,14 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
     headers.set('Content-Type', 'application/json');
   }
 
+  // Attach Bearer token as fallback header if present in localStorage
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('auth_token');
+    if (token && !headers.has('Authorization')) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+  }
+
   const response = await fetch(url, {
     ...options,
     headers,
@@ -29,10 +37,12 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
   });
 
   if (response.status === 401) {
-    if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
-      // Clear session state and redirect to login
-      window.dispatchEvent(new Event('auth-session-expired'));
-      window.location.href = '/login?expired=1';
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('auth_token');
+      if (!window.location.pathname.startsWith('/login')) {
+        window.dispatchEvent(new Event('auth-session-expired'));
+        window.location.href = '/login?expired=1';
+      }
     }
     throw new ApiError('Session expired. Please log in again.', 401, 'UNAUTHORIZED');
   }
@@ -50,21 +60,32 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
 
 export const api = {
   auth: {
-    login: async (email: string, password: string): Promise<{ user: User; message: string }> => {
-      return request<{ user: User; message: string }>('/auth/login', {
+    login: async (email: string, password: string): Promise<{ user: User; token?: string; message: string }> => {
+      const res = await request<{ user: User; token?: string; message: string }>('/auth/login', {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       });
+      if (res.token && typeof window !== 'undefined') {
+        localStorage.setItem('auth_token', res.token);
+      }
+      return res;
     },
 
-    register: async (email: string, password: string): Promise<{ user: User; message: string }> => {
-      return request<{ user: User; message: string }>('/auth/register', {
+    register: async (email: string, password: string): Promise<{ user: User; token?: string; message: string }> => {
+      const res = await request<{ user: User; token?: string; message: string }>('/auth/register', {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       });
+      if (res.token && typeof window !== 'undefined') {
+        localStorage.setItem('auth_token', res.token);
+      }
+      return res;
     },
 
     logout: async (): Promise<{ message: string }> => {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('auth_token');
+      }
       return request<{ message: string }>('/auth/logout', {
         method: 'POST',
       });

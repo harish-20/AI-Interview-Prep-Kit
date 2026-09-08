@@ -9,6 +9,9 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
+// Trust reverse proxy for HTTPS cookie security in production deployments
+app.set('trust proxy', 1);
+
 // Global Middlewares
 app.use(
   cors({
