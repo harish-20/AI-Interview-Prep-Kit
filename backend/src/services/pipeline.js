@@ -6,8 +6,6 @@ const { checkCoverage } = require('./coverage');
 const { buildSchedule } = require('./scheduler');
 const { validateKitStructure } = require('./validation');
 
-const { extractCompanyUrlsFromJd } = require('../utils/extractUrls');
-
 const MAX_COVERAGE_PASSES = 3;
 
 /**
@@ -32,16 +30,6 @@ async function runPipeline({ jd, company_url, days = 7, allowLocalhost = false }
       };
     }
 
-    // Auto-extract landing page URL from JD (links & HR emails) if company_url was not provided
-    let targetUrl = company_url ? company_url.trim() : '';
-    if (!targetUrl) {
-      const candidates = extractCompanyUrlsFromJd(jd);
-      if (candidates.length > 0) {
-        targetUrl = candidates[0];
-        console.log(`[Pipeline] Auto-detected company URL from JD: ${targetUrl}`);
-      }
-    }
-
     // 1. Requirement Extraction
     const roleDetails = await extractRequirements(jd);
     const requirements = roleDetails.requirements || [];
@@ -51,9 +39,9 @@ async function runPipeline({ jd, company_url, days = 7, allowLocalhost = false }
     let scrapedPages = [];
     const pagesUsed = [];
 
-    if (targetUrl) {
+    if (company_url) {
       try {
-        const discovered = await discoverCompanyPages(targetUrl, { allowLocalhost });
+        const discovered = await discoverCompanyPages(company_url, { allowLocalhost });
         for (const pageUrl of discovered) {
           const res = await fetchAndClean(pageUrl, { allowLocalhost });
           if (res.status === 'ok') {
@@ -66,14 +54,14 @@ async function runPipeline({ jd, company_url, days = 7, allowLocalhost = false }
 
         // Infer company name from URL hostname if available
         try {
-          const parsed = new URL(targetUrl);
+          const parsed = new URL(company_url);
           companyName = parsed.hostname.replace('www.', '').split('.')[0];
           companyName = companyName.charAt(0).toUpperCase() + companyName.slice(1);
         } catch {
           // ignore
         }
       } catch (err) {
-        console.warn(`[Pipeline] Discovery failed for ${targetUrl}:`, err.message);
+        console.warn(`[Pipeline] Discovery failed for ${company_url}:`, err.message);
       }
     }
 
@@ -146,7 +134,7 @@ async function runPipeline({ jd, company_url, days = 7, allowLocalhost = false }
       status: 'ready',
       source: {
         company: companyName,
-        company_url: company_url || targetUrl || '',
+        company_url: company_url || '',
         role: roleDetails.title || 'Target Role',
         location: 'Remote / Unspecified',
         jd_chars: jd.length,

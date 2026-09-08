@@ -76,22 +76,12 @@ export default function NewKitPage() {
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
-          const parsed = (results.data as Record<string, string>[]).map((row) => {
-            const jdText = row.jd || row.job_description || row.JD || '';
-            let url = row.company_url || row.url || row.company || '';
-            if (!url && jdText) {
-              const extracted = extractCompanyUrlsFromJd(jdText);
-              if (extracted.length > 0) {
-                url = extracted[0].url;
-              }
-            }
-            return {
-              jd: jdText,
-              company_url: url,
-              days: parseInt(row.days || row.days_until_interview || '7', 10) || 7,
-              status: 'pending' as const,
-            };
-          });
+          const parsed = (results.data as Record<string, string>[]).map((row) => ({
+            jd: row.jd || row.job_description || row.JD || '',
+            company_url: row.company_url || row.url || row.company || '',
+            days: parseInt(row.days || row.days_until_interview || '7', 10) || 7,
+            status: 'pending' as const,
+          }));
 
           const validRows = parsed.filter((r) => r.jd.length > 0);
           if (validRows.length === 0) {
@@ -110,22 +100,12 @@ export default function NewKitPage() {
         try {
           const json = JSON.parse(event.target?.result as string);
           const list = Array.isArray(json) ? json : [json];
-          const parsed: BatchRow[] = (list as Record<string, string>[]).map((item) => {
-            const jdText = item.jd || item.job_description || '';
-            let url = item.company_url || item.url || '';
-            if (!url && jdText) {
-              const extracted = extractCompanyUrlsFromJd(jdText);
-              if (extracted.length > 0) {
-                url = extracted[0].url;
-              }
-            }
-            return {
-              jd: jdText,
-              company_url: url,
-              days: parseInt(item.days || '7', 10) || 7,
-              status: 'pending' as const,
-            };
-          });
+          const parsed: BatchRow[] = (list as Record<string, string>[]).map((item) => ({
+            jd: item.jd || item.job_description || '',
+            company_url: item.company_url || item.url || '',
+            days: parseInt(item.days || '7', 10) || 7,
+            status: 'pending' as const,
+          }));
 
           const validRows = parsed.filter((r) => r.jd.length > 0);
           if (validRows.length === 0) {
