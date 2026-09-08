@@ -1,0 +1,14 @@
+[
+  {
+    "id": "case_1",
+    "jd": "We are seeking a Senior Full-Stack Engineer skilled in Node.js, Express, MongoDB, and React. You will build high-performance REST services and collaborate with product managers.",
+    "company_url": "http://localhost:8080",
+    "days": 5
+  },
+  {
+    "id": "case_2",
+    "jd": "Looking for a Backend Developer proficient in Python, SQL, and AWS. Must have strong system design capabilities and team leadership experience.",
+    "company_url": "",
+    "days": 3
+  }
+]
