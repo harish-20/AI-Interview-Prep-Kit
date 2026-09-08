@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Papa from 'papaparse';
 import { api } from '@/lib/api';
-import { Sparkles, Upload, FileText, Calendar, Link as LinkIcon, Loader2, AlertCircle, Table, Check } from 'lucide-react';
+import { extractCompanyUrlsFromJd } from '@/lib/extractUrls';
+import { Sparkles, Upload, FileText, Calendar, Link as LinkIcon, Loader2, AlertCircle, Table, Check, Globe, Mail } from 'lucide-react';
 
 interface BatchRow {
   jd: string;
@@ -29,6 +30,9 @@ export default function NewKitPage() {
   const [batchRows, setBatchRows] = useState<BatchRow[]>([]);
   const [fileError, setFileError] = useState<string | null>(null);
   const [batchProcessing, setBatchProcessing] = useState(false);
+
+  // Auto-extract URL landing page suggestions from JD
+  const urlSuggestions = useMemo(() => extractCompanyUrlsFromJd(jd), [jd]);
 
   const handleSingleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,12 +76,22 @@ export default function NewKitPage() {
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
-          const parsed = (results.data as Record<string, string>[]).map((row) => ({
-            jd: row.jd || row.job_description || row.JD || '',
-            company_url: row.company_url || row.url || row.company || '',
-            days: parseInt(row.days || row.days_until_interview || '7', 10) || 7,
-            status: 'pending' as const,
-          }));
+          const parsed = (results.data as Record<string, string>[]).map((row) => {
+            const jdText = row.jd || row.job_description || row.JD || '';
+            let url = row.company_url || row.url || row.company || '';
+            if (!url && jdText) {
+              const extracted = extractCompanyUrlsFromJd(jdText);
+              if (extracted.length > 0) {
+                url = extracted[0].url;
+              }
+            }
+            return {
+              jd: jdText,
+              company_url: url,
+              days: parseInt(row.days || row.days_until_interview || '7', 10) || 7,
+              status: 'pending' as const,
+            };
+          });
 
           const validRows = parsed.filter((r) => r.jd.length > 0);
           if (validRows.length === 0) {
@@ -96,12 +110,22 @@ export default function NewKitPage() {
         try {
           const json = JSON.parse(event.target?.result as string);
           const list = Array.isArray(json) ? json : [json];
-          const parsed: BatchRow[] = (list as Record<string, string>[]).map((item) => ({
-            jd: item.jd || item.job_description || '',
-            company_url: item.company_url || item.url || '',
-            days: parseInt(item.days || '7', 10) || 7,
-            status: 'pending' as const,
-          }));
+          const parsed: BatchRow[] = (list as Record<string, string>[]).map((item) => {
+            const jdText = item.jd || item.job_description || '';
+            let url = item.company_url || item.url || '';
+            if (!url && jdText) {
+              const extracted = extractCompanyUrlsFromJd(jdText);
+              if (extracted.length > 0) {
+                url = extracted[0].url;
+              }
+            }
+            return {
+              jd: jdText,
+              company_url: url,
+              days: parseInt(item.days || '7', 10) || 7,
+              status: 'pending' as const,
+            };
+          });
 
           const validRows = parsed.filter((r) => r.jd.length > 0);
           if (validRows.length === 0) {
@@ -233,6 +257,45 @@ export default function NewKitPage() {
                 placeholder="https://company.com/about"
                 className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 text-sm"
               />
+
+              {urlSuggestions.length > 0 && (
+                <div className="mt-2.5 p-2.5 rounded-xl bg-indigo-950/40 border border-indigo-500/20 space-y-1.5">
+                  <div className="flex items-center gap-1.5 text-[11px] font-medium text-indigo-300">
+                    <Sparkles className="h-3 w-3 text-indigo-400 shrink-0" />
+                    <span>Suggested Landing Pages from JD:</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {urlSuggestions.map((sug) => {
+                      const isSelected = companyUrl === sug.url;
+                      return (
+                        <button
+                          key={sug.url}
+                          type="button"
+                          onClick={() => setCompanyUrl(sug.url)}
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono transition-all border ${
+                            isSelected
+                              ? 'bg-indigo-600 text-white border-indigo-500 shadow-md shadow-indigo-500/30 font-semibold'
+                              : 'bg-zinc-900/90 text-indigo-200 border-zinc-700/80 hover:bg-zinc-800 hover:border-indigo-500/40'
+                          }`}
+                        >
+                          {sug.sourceType === 'email' ? (
+                            <Mail className="h-3 w-3 shrink-0 text-purple-400" />
+                          ) : (
+                            <Globe className="h-3 w-3 shrink-0 text-indigo-400" />
+                          )}
+                          <span>{sug.url}</span>
+                          {sug.sourceType === 'email' && (
+                            <span className="text-[10px] px-1 py-0.2 rounded bg-purple-500/20 text-purple-300 font-sans">
+                              from email
+                            </span>
+                          )}
+                          {isSelected && <Check className="h-3 w-3 ml-0.5 text-white" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div>

@@ -39,8 +39,8 @@ function sanitizeKitForAppendix(kit) {
 
 async function main() {
   const args = minimist(process.argv.slice(2));
-  const inputFile = args.input || args.i;
-  const outputFile = args.output || args.o;
+  const inputFile = args.input || args.i || args._[0];
+  const outputFile = args.output || args.o || args._[1];
 
   if (!inputFile || !outputFile) {
     console.error('Error: Missing required arguments --input or --output.');
@@ -90,7 +90,7 @@ async function main() {
         const cleanKit = sanitizeKitForAppendix(pipelineResult.kit);
         results.push({
           id: caseId,
-          status: 'ready',
+          status: 'ok',
           kit: cleanKit,
           error: null,
         });
