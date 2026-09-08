@@ -39,6 +39,7 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
   if (response.status === 401) {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('auth_token');
+      document.cookie = 'auth_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
       if (!window.location.pathname.startsWith('/login')) {
         window.dispatchEvent(new Event('auth-session-expired'));
         window.location.href = '/login?expired=1';
@@ -65,8 +66,9 @@ export const api = {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       });
-      if (res.token && typeof window !== 'undefined') {
-        localStorage.setItem('auth_token', res.token);
+      if (typeof window !== 'undefined') {
+        if (res.token) localStorage.setItem('auth_token', res.token);
+        document.cookie = 'auth_session=true; path=/; max-age=604800; SameSite=Lax';
       }
       return res;
     },
@@ -76,8 +78,9 @@ export const api = {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       });
-      if (res.token && typeof window !== 'undefined') {
-        localStorage.setItem('auth_token', res.token);
+      if (typeof window !== 'undefined') {
+        if (res.token) localStorage.setItem('auth_token', res.token);
+        document.cookie = 'auth_session=true; path=/; max-age=604800; SameSite=Lax';
       }
       return res;
     },
@@ -85,6 +88,7 @@ export const api = {
     logout: async (): Promise<{ message: string }> => {
       if (typeof window !== 'undefined') {
         localStorage.removeItem('auth_token');
+        document.cookie = 'auth_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
       }
       return request<{ message: string }>('/auth/logout', {
         method: 'POST',
